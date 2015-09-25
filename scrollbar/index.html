@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>自定义滚动条</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	#wrapper{
+		position: relative;
+		width: 320px;
+		height: 568px;
+		border:1px solid #000;
+		overflow: hidden;
+	}
+	#scroll{
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 15px;
+		height: 100%;
+		background: #eee;
+	}
+	#bar{
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 100%;
+		height: 60px;
+		background: #ccc;
+	}
+	#content{
+		padding: 10px 20px;
+		font-size: 16px;
+		line-height: 28px;
+	}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="content" style="margin-top: 0">
+		<p>央广网华盛顿9月25日消息（记者马闯）据中国之声《新闻纵横》报道，关注习近平主席的访美之旅。北京时间今早五点半，习主席抵达了访美第二站——美国首都华盛顿，将在这里出席奥巴马总统为其举行的一系列国事活动。</p>
+		<p>按计划，习主席此刻正与奥巴马共进晚宴，这是两人今年的首次会面，大约两个半小时前习主席抵达华盛顿。在酒店稍事休息后，他前往白宫，与奥巴马会面，这也是两国元首今年的首次见面。不过，这并不是一场打领带的正式会晤，习主席来到白宫，是要同奥巴马一起去布莱尔国宾馆，在那里，奥巴马为习主席准备了一场小范围的晚宴。</p>
+		<p>记者现在就站在白宫北侧的宾夕法尼亚大街旁，大概半小时前，也就是当地时间晚上7点半，习近平和奥巴马从白宫西北侧的大门步行而出，经过宾夕法尼亚大街，进入到布	 莱尔国宾馆。这段路程非常近，大概只有100米，两人身着深色西装、白色衬衫，没有打领带，边走边聊，颇有去年在北京瀛台夜话的感觉。不过9月华盛顿的夜晚并没有11	月北京秋夜那样寒冷，各界也期待两国元首能够在这样轻松的气氛中，充分交流，达成更多共识，同时，也为明天的国事活动做足准备。</p>
+　　		<p>但由于今天的晚宴只是小范围的私人宴请，因此，只有两名摄影记者被允许进入拍摄照片，所以两人谈话的具体内容不得而知。</p>
+		</div>
+		<div id="scroll">
+			<div id="bar"></div>
+		</div>	
+	</div>
+	<script>
+	var wrap = document.getElementById("wrapper");
+	var content = document.getElementById("content");
+	var bar = document.getElementById("bar");
+	var scroll = document.getElementById("scroll");
+	var wrapH = wrap.offsetHeight;
+	var contentH = content.offsetHeight;
+	var barH = bar.offsetHeight;
+	var maxBarTop = wrapH - barH;
+	var maxContentTop = contentH - wrapH;
+	var scale;
+	function scrolling(){
+		scale = bar.offsetTop / maxBarTop;
+		content.style.marginTop = - scale * maxContentTop + 'px';
+	}
+	bar.onmousedown = function(e){
+		var disY = e.clientY - this.offsetTop;
+		document.onmousemove = function(e){
+			e.preventDefault();
+			var y = e.clientY - disY;
+			if(y <= 0) y = 0;
+			if(y >= wrapH - barH) y = wrapH - barH; 
+			bar.style.top = y+'px';
+			scrolling();
+		}
+		document.onmouseup = function(){
+			document.onmousemove  = null;
+		}
+	}
+	window.onkeydown = function(e){
+		var curY = bar.offsetTop;
+		var code = e.keyCode || e.which;		
+		switch(code){
+			case 38:
+				if(curY <= 0) curY = 10;
+				bar.style.top = (curY - 10) + 'px';
+				break;
+			case 40:
+				if(curY >= wrapH - barH) curY = wrapH - barH - 10;
+				bar.style.top = (curY + 10) + 'px';
+				break;
+			default:
+				break;
+		}
+		scrolling();
+	}
+	scroll.onclick = function(e){
+		bar.style.top = (e.clientY - barH/2) + 'px';
+		scrolling();
+	}
+	function scrollFn(e){
+		var curY = bar.offsetTop;
+		var delta = e.wheelDelta || e.detail;		
+		if(e.wheelDelta){//其他
+			if(delta > 0){//上滚
+				if(curY <= 0) curY = 10;
+				bar.style.top = (curY - 10) + 'px';	
+			}else{//下滚
+				if(curY >= wrapH - barH) curY = wrapH - barH - 10;
+				bar.style.top = (curY + 10) + 'px';
+			}
+		}else if(e.detail){//火狐
+			if(delta < 0){//上滚
+				if(curY <= 0) curY = 10;
+				bar.style.top = (curY - 10) + 'px';
+			}else{//下滚
+				if(curY >= wrapH - barH) curY = wrapH - barH - 10;
+				bar.style.top = (curY + 10) + 'px';
+			}	
+		}	
+		scrolling();	
+	}
+	// firefox
+	if(document.addEventListener){
+		document.addEventListener('DOMMouseScroll',scrollFn,false);
+	}
+	//其它
+	document.onmousewheel = scrollFn;
+	</script>
+</body>
+</html>
+
+
+
