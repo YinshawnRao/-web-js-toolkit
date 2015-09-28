@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>放大镜效果canvas实现</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#canvas{
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			-webkit-transform: translate3d(-50%,-50%,0);
+			transform: translate3d(-50%,-50%,0);
+			cursor:none;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<canvas id="zoom" style="display:none"></canvas>
+	<script>
+	var cvs=document.querySelector("#canvas");
+	var zm=document.querySelector("#zoom");
+	var ctx=cvs.getContext("2d");
+	var ztx=zm.getContext("2d");
+	var img=new Image();
+	var scale=3;
+	var magR=150;
+	img.src="http:/www.raozongv5.com/codeshare/images/loli.jpg";
+	img.onload=function(){
+		cvs.width=img.width/scale;
+		cvs.height=img.height/scale;
+		zm.width=img.width;
+		zm.height=img.height;
+		ctx.drawImage(img,0,0,cvs.width,cvs.height);
+		ztx.drawImage(img,0,0,zm.width,zm.height);
+		cvs.onmousemove=function(e){
+			var x=e.clientX-getBox(cvs).left;
+			var y=e.clientY-getBox(cvs).top;
+			var w=h=magR*2;
+			var sx=x*scale-magR;
+			var sy=y*scale-magR;
+			var dx=x-magR;
+			var dy=y-magR;
+			ctx.drawImage(img,0,0,cvs.width,cvs.height);
+			ctx.save();
+			ctx.lineWidth=2;
+			ctx.strokeStyle="#000";
+			ctx.beginPath();
+			ctx.arc(x,y,magR,0,Math.PI*2,false);
+			ctx.stroke();
+			ctx.clip();
+			ctx.drawImage(zm,sx,sy,w,h,dx,dy,w,h);
+			ctx.restore();
+		}
+		cvs.onmouseout=function(){
+			ctx.clearRect(0,0,cvs.width,cvs.height);
+			ctx.drawImage(img,0,0,cvs.width,cvs.height);
+		}
+		function getBox(canvas){
+			return canvas.getBoundingClientRect();
+		}
+	}
+	</script>
+</body>
+</html>
