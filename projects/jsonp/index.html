@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模拟百度搜索框</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	ul,li{
+		list-style: none;
+	}
+	.baiduSearch{
+		width: 600px;
+		margin:100px auto 0; 
+		text-align: center;
+	}
+	#search_txt{
+		width: 500px;
+		height: 40px;
+		border:1px solid #ccc;
+		border-right: 0;
+		outline: 0;
+		text-indent: 10px;
+		font-size: 24px;
+	}
+	#search_btn{
+		display: inline-block;
+		width: 100px;
+		height: 40px;
+		line-height: 40px;
+		vertical-align: top;
+		font-size: 20px;
+		cursor: pointer;
+		color:#666;
+		border:1px solid #ccc;
+		text-decoration: none;
+	}
+	.result{
+		width: 500px;
+		border:1px solid #ccc;
+		border-top: 0;
+		display: none;
+	}
+	.result>li{
+		height: 30px;
+		line-height: 30px;
+		text-align: left;
+		text-indent: 10px;
+	}
+	</style>
+</head>
+<body>
+	<div class="baiduSearch">		
+		<input type="text" id="search_txt"><a href="javascript:;" id="search_btn">搜索</a>
+		<ul class="result"></ul>
+	</div>
+	<script>
+	var stxt=document.getElementById("search_txt");
+	var sbtn=document.getElementById("search_btn");
+	var oUl=document.querySelector(".result");
+	stxt.oninput=function(){
+		sbtn.setAttribute("href","https://www.baidu.com/s?wd="+stxt.value);
+		oUl.innerHTML="";
+		jsonP({
+			url: "https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su",
+			params: {wd: stxt.value},
+			callback: "cb",
+			callbackName: "jsonp"+new Date().getTime(),
+			succFn: function(res){
+				var htmls="";
+				for(var i = 0;i<res.s.length;i++){
+					htmls+="<li>"+res.s[i]+"</li>";
+				}
+				oUl.style.display = "block";
+				oUl.innerHTML = htmls;
+				if(res.s.length==0){
+					oUl.style.display="none";
+				}
+			}
+		});
+	};
+
+	function jsonP(options){
+		var u=options.url;
+		var p=options.params;
+		var cb=options.callback;
+		var cn=options.callbackName;		
+		var fn=options.succFn;
+		var script=document.createElement("script");
+		window[cn]=fn;
+		p[cb]=cn;
+		var pa=[];
+		for(var i in p){
+			pa.push(i+"="+p[i]);
+		}
+		pa=pa.join("&");
+		u=u+"?"+pa;
+		script.src=u;
+		document.body.appendChild(script);
+		document.body.removeChild(script);
+	};
+	</script>
+</body>
+</html>
