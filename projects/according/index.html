@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>手风琴菜单</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	ul,ol{
+		list-style: none;
+	}
+	a{
+		text-decoration: none;
+		color: #000;
+	}
+	#wrapper{	
+		width: 320px;
+		border: 1px solid #000;		
+	}
+	#accord{
+		width: 100%;
+	}
+	#accord li{
+		background: #ccc;	
+		border-bottom: 1px solid #000;	
+	}
+	#accord li:last-child{
+		border-bottom: 0;
+	}
+	#accord li a{
+		display: block;
+		height: 72px;
+		line-height: 72px;
+		font-size: 24px;
+		padding-left: 10px;
+	}
+	#accord li .level1{
+		background: #fff;
+		display: none;		
+	}
+	#accord li .level1 dd{
+		border-bottom: 1px solid #ccc;
+	}
+	#accord li .level1 dd:last-child{
+		border-bottom: 0;
+	}
+	#accord li .level1 dd>a{
+		padding-left: 20px;
+	}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<ul id ="accord">
+			<li>
+				<a href="javascript:void(0);">菜单1</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+			<li>
+				<a href="javascript:void(0);">菜单2</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+			<li>
+				<a href="javascript:void(0);">菜单3</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+			<li>
+				<a href="javascript:void(0);">菜单4</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+			<li>
+				<a href="javascript:void(0);">菜单5</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+			<li>
+				<a href="javascript:void(0);">菜单6</a>
+				<dl class="level1">
+					<dd><a href="javascript:void(0);">子菜单1</a></dd>
+					<dd><a href="javascript:void(0);">子菜单2</a></dd>
+					<dd><a href="javascript:void(0);">子菜单3</a></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+	var $nav = $("#accord li>a");
+	$nav.on("click",function(){
+		$nav.next().slideUp('fast'); //取消非当前聚焦子菜单的激活状态
+		$(this).next().stop().slideToggle('fast');
+	});
+	</script>
+</body>
+</html>
+
+
+
+
+
