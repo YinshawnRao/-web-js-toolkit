@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>矩形碰撞检测</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	div{
+		position: absolute;
+		width: 100px;
+		height: 100px;
+	}
+	#div1{
+		background: red;
+		left: 0;
+		top: 0;
+	}
+	#div2{
+		border:1px solid gray;
+		left: 50%;
+		top: 50%;
+		margin-top: -50px;
+		margin-left: -50px;
+	}
+	</style>
+</head>
+<body>
+	<div id="div1"></div>
+	<div id="div2"></div>
+	<!-- 碰撞检测 -->
+	<script>
+
+	function getImpacts(obj1,obj2){
+		var t1=obj1.offsetTop;
+		var t2=obj2.offsetTop;
+		var l1=obj1.offsetLeft;
+		var l2=obj2.offsetLeft;
+		var b1=obj1.offsetTop+obj1.offsetHeight;
+		var b2=obj2.offsetTop+obj2.offsetHeight;
+		var r1=obj1.offsetLeft+obj1.offsetWidth;
+		var r2=obj2.offsetLeft+obj2.offsetWidth;
+		if(!(t1>b2||t2>b1||l1>r2||l2>r1)){
+			console.log("碰到了");
+		}
+		else{
+			console.log("没有碰到");
+		}
+	}
+
+
+	</script>
+
+
+	<script>
+	var div1=document.querySelector("#div1");
+	var div2=document.querySelector("#div2");
+	var disX=0;
+	var disY=0;
+
+	div1.onmousedown=function(e){
+		var e=e||window.event;
+		disX=e.clientX-div1.offsetLeft;
+		disY=e.clientY-div1.offsetTop;
+		document.onmousemove=function(e){
+			var e=e||window.event;
+			var x=e.clientX-disX;
+			var y=e.clientY-disY;
+			div1.style.left=x+"px";
+			div1.style.top=y+"px";
+			getImpacts(div1,div2);
+		}		
+	}
+
+	div1.onmouseup=function(e){
+		document.onmousemove=null;
+	}
+	</script>
+</body>
+</html>
