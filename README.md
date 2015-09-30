@@ -2,6 +2,8 @@
 
 according -> 手风琴导航
 
+circle -> 圆环以及进度条
+
 css3Keyframes -> css3动画
 
 hitTest -> 碰撞检测

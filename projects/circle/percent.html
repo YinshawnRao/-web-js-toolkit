@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>圆环进度条</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	.mycircle{
+		position: relative;
+		width: 200px;
+		height: 200px;
+		border-radius: 50%;
+		background: #f1f1f1;
+	}
+	.progress{
+		position: absolute;
+		left: 25px;
+		top: 25px;
+		width: 150px;
+		height: 150px;
+		line-height: 150px;
+		text-align: center;
+		font-size: 30px;
+		border-radius: 50%;
+		background: #fff;
+		z-index: 99;
+	}
+	.circle{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		top: 0;
+		left: 0;
+	}
+	.circle .left,.circle .right{	
+		position: absolute;
+		top: 0;
+		width: 50%;
+		height: 100%;	
+		background: #00c;	
+		-webkit-transition: transform 1s linear 0s;
+		-moz-transition: transform 1s linear 0s;
+		transition: transform 1s linear 0s;		
+	}
+	.circle .left_mask{
+		position: absolute;
+		top: 0;
+		width: 50%;
+		height: 100%;
+		background: #f1f1f1;	
+		z-index: 95;
+	}
+	.circle .left,.circle .left_mask,.circle .mask{
+		left: 0;
+		border-radius: 100% 0 0 100%/50% 0 0 50%;	
+		transform-origin: 100% 50%;
+		-webkit-transform-origin: 100% 50%;
+		-moz-transform-origin: 100% 50%;
+	}
+	.circle .left{
+		z-index: 94;
+	}
+	.circle .right{
+		right: 0;
+		border-radius: 0 100% 100% 0/0 50% 50% 0;
+		transform-origin: 0% 50%;
+		-webkit-transform-origin: 0% 50%;
+		-moz-transform-origin: 0% 50%;
+		transform: rotate(-180deg);
+		-webkit-transform: rotate(-180deg);
+		-moz-transform: rotate(-180deg);
+		z-index: 96;
+	}
+	.circle .mask{
+		position: absolute;
+		top: 0;
+		width: 50%;
+		height: 100%;
+		background: #f1f1f1;	
+		z-index: 97;
+	}
+	</style>
+</head>
+<body>
+	<div class="mycircle">
+		<div class="circle">
+			<div class="left"></div>			
+			<div class="left_mask"></div>
+			<div class="right">
+				
+			</div>
+			<div class="mask"></div>
+		</div>
+		<div class="progress">	<span class="percent">75</span>%</div>
+	</div>
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>
+	var $left = $(".left"),
+	$right = $(".right"),
+	$per = $(".percent"),
+	perc = $(".percent").html(),
+	percent = perc*3.6;
+
+	if(perc >=0 && perc <=100){
+		if(perc > 50){
+			percent = 50*3.6;
+			per_rest = (perc - 50)*3.6;
+			time_rest = (perc - 50)*1 / 50;
+		}
+		var trans = {
+			"transform": "rotate("+(percent-180)+"deg)",
+			"-webkit-transform": "rotate("+(percent-180)+"deg)",
+			"-moz-transform": "rotate("+(percent-180)+"deg)"
+		};			
+		$right.css(trans);
+		setTimeout(function(){
+			$(".mask").hide();
+			$(".left_mask").css({
+				"transition": "transform "+time_rest+"s linear 0s",
+				"transform": "rotate("+per_rest+"deg)"
+			});
+		},1000);
+	}
+	</script>
+</body>
+</html>
