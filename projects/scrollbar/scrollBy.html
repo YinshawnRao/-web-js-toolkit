@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>跟随滚动</title>
+	<style>
+	*{
+		margin: 0;
+		padding: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	html,body{
+		min-width: 1024px;
+		height: 100%;
+	}
+	ul{
+		list-style: none;
+	}
+	#wrapper{
+		width: 1024px;
+		margin: 0 auto;
+	}
+	nav,footer{
+		height: 300px;
+		line-height: 300px;
+		border:2px solid #ccc;
+		text-align: center;
+		font-size: 50px;
+	}
+	#main .content{
+		border: 2px solid #ccc;
+		margin: 10px 0;
+		padding: 10px;
+	}
+	#main .content1{
+		height: 500px;
+	}
+	#main .content2{
+		height: 767px;
+	}
+	#main .content3{
+		height: 415px;
+	}
+	#main .content4{
+		height: 700px;
+	}
+	#main .content5{
+		height: 666px;
+	}
+	#main .content6{
+		height: 320px;
+	}
+	#main .content7{
+		height: 268px;
+	}
+	#main .content8{
+		height: 542px;
+	}
+	#main .content9{
+		height: 466px;
+	}
+	#main .content10{
+		height: 598px;
+	}
+	#main .content1{
+		height: 498px;
+	}
+	#elevator{
+		position: fixed;
+		width: 30px;
+		left: 0;
+		top: 50%;
+		-webkit-transform: translate(0,-50%);
+		-moz-transform: translate(0,-50%);
+		transform: translate(0,-50%);
+	}
+	#ele_box li{
+		width: 30px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		border-bottom: 1px dotted #bbb;
+		cursor: pointer;
+	}
+	#ele_box li:hover,#ele_box li.active{
+		color: #fff;
+		background: #000;
+	}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="main">
+			<nav>头部</nav>
+			<section class="content content1 f1">
+				<h2>1楼内容</h2>
+			</section>
+			<section class="content content2 f2">
+				<h2>2楼内容</h2>
+			</section>
+			<section class="content content3 f3">
+				<h2>3楼内容</h2>
+			</section>
+			<section class="content content4 f4">
+				<h2>4楼内容</h2>
+			</section>
+			<section class="content content5 f5">
+				<h2>5楼内容</h2>
+			</section>
+			<section class="content content6 f6">
+				<h2>6楼内容</h2>
+			</section>
+			<section class="content content7 f7">
+				<h2>7楼内容</h2>
+			</section>
+			<section class="content content8 f8">
+				<h2>8楼内容</h2>
+			</section>
+			<section class="content content9 f9">
+				<h2>9楼内容</h2>
+			</section>
+			<section class="content content10 f10">
+				<h2>10楼内容</h2>
+			</section>
+			<footer>
+				底部
+			</footer>
+		</div>
+		<div id="elevator">
+			<ul id="ele_box">
+				<li class="go got">顶</li>
+				<li data-floor="f1">1F</li>
+				<li data-floor="f2">2F</li>
+				<li data-floor="f3">3F</li>
+				<li data-floor="f4">4F</li>
+				<li data-floor="f5">5F</li>
+				<li data-floor="f6">6F</li>
+				<li data-floor="f7">7F</li>
+				<li data-floor="f8">8F</li>
+				<li data-floor="f9">9F</li>
+				<li data-floor="f10">10F</li>
+				<li class="go gob">底</li>
+			</ul>
+		</div>
+	</div>	
+	<script src="jquery-1.8.1.min.js"></script>
+	<script>
+	var $elev = $("#elevator");
+	var $floor = $("#ele_box>li").not(".go");
+	var $contents = $(".content");
+	var elevW = $elev.width();
+	var curL = $("#wrapper").offset().left;	
+	var arrPos = [];
+
+	for(var i=0;i<$contents.length;i++){
+		arrPos.push($contents.eq(i).offset().top);
+	}
+
+	function getPos(arr, n){
+		var index = 0;
+		for(var i in arr){
+			if(n < arr[i]){
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
+
+	function track(){
+		var curTop = $(window).scrollTop();
+		var curVH = $(window).height();
+		var judge = curVH/2 + curTop;
+		var pos = getPos(arrPos,judge);
+		if(pos <= 0) pos = 1;
+		$floor.removeClass("active");
+		$floor.eq(pos-1).addClass("active");
+	};
+
+	track();
+	$elev.css("left",(curL-elevW-10)+'px');
+	$(window).resize(function(){
+		curL = $("#wrapper").offset().left;
+		$elev.css("left",(curL-elevW-10)+'px');
+	}).on("scroll",track);
+
+	$floor.click(function(){				
+		$(window).off("scroll");
+		var curF = $(this).data("floor");
+		var curPos = $('.'+curF).offset().top;
+		$floor.removeClass("active");
+		$(this).addClass("active");
+		$("html,body").stop().animate({
+			"scrollTop": curPos+'px'
+		},function(){
+			setTimeout(function(){
+				$(window).on("scroll",track);
+			},100);
+		});
+	});
+
+	$(".got").click(function(){
+		$("html,body").stop().animate({
+			"scrollTop": '0px'
+		});
+	});
+
+	$(".gob").click(function(){
+		var bPos = $(document).height() - $(window).height();
+		$("html,body").stop().animate({
+			"scrollTop": bPos + 'px'
+		});
+	});
+
+	</script>
+</body>
+</html>

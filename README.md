@@ -14,4 +14,4 @@ magnifer -> 放大镜
  
 pool -> 瀑布流
 
-scrollbar -> 自定义滚动条
+scrollbar -> 滚动条系列
